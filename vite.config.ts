@@ -6,18 +6,22 @@ import { componentTagger } from "lovable-tagger";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Ensure the frontend build always has the Supabase env vars available.
-  // In some hosted environments, VITE_* vars may not be injected even when backend secrets exist.
-  // We therefore fall back to the backend-provided SUPABASE_* secrets at build time.
+  // In some hosted environments, VITE_* vars may not be injected.
+  // We fall back to explicit (public) values so the app never hard-crashes on import.
   const env = loadEnv(mode, process.cwd(), "");
 
   const supabaseUrl =
-    env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "";
+    env.VITE_SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    process.env.SUPABASE_URL ||
+    "https://mpkuorlnqndjczzmexzi.supabase.co";
 
   const supabasePublishableKey =
     env.VITE_SUPABASE_PUBLISHABLE_KEY ||
     process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
     process.env.SUPABASE_PUBLISHABLE_KEY ||
-    "";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wa3VvcmxucW5kamN6em1leHppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTU3OTYsImV4cCI6MjA4MzkzMTc5Nn0.HtVNR6f5_6Pp45DSiaxAN0ivIedwBdHsTRn8_2uq71o";
+
 
   return {
     server: {
